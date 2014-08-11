@@ -8,27 +8,32 @@ sigGenes <- read.table("data/sigGenes.Zach2014.corrected.lst")
 top25 <- top25[3:dim(top25)[[1]],1]
 
 
-reduce.features <- function(featurenames1, featurenames2, data) {
-	n <- length(featurenames1)
+#adds  feature from featurelist1 to reduced data matrix if it is present in featurelist2 and the data matrix
+reduce.features <- function(featurenames, column, data) {
+	n <- length(featurenames)
 	m <- dim(data)[[2]]
 	rnames <- list()
 	for(i in 1:n) {
-		if((featurenames1[[i]] %in% rownames(data)) && (featurenames1[[i]] %in% featurenames2)) {
-			print("found feature")
-			rnames[[length(rnames) + 1]] <- featurenames1[[i]]
-			
+		f <- as.character(featurenames[[i]])
+		data.feature.names <- data[,column]
+		if(f %in% data.feature.names) {
+			rnames[[length(rnames) + 1]] <- f
+			#print("found match")
 		}
+		
 	}
-	reduced.features <- matrix(0, length(rnames), m)
-	rownames(reduced.features) <- rnames
-	print(rnames)
+	reduced.features <- as.data.frame(matrix(0, length(rnames), m))
+	#print(rnames)
 	for(i in 1:length(rnames)) {
 		name <- rnames[[i]]
-		reduced.features[name, ] <- data[name, ]
+		selected.row <- data[data[column] == name,]
+		reduced.features[i, ] <- selected.row
 	}
 	colnames(reduced.features) <- colnames(data)
 	return(reduced.features)
 }
+
+
 
 
 make.response.matrix <- function() {
@@ -56,19 +61,20 @@ make.response.matrix <- function() {
 run.ando <- function() {
 	drug.response.matrix <- make.response.matrix()
 	ccle.expression.names <- rownames(ccle.expression)
-	print(ccle.expression.names)
+	#print(ccle.expression.names)
 
-	achilles.expression.reduced <- reduce.features(top25, ccle.expression.names, expression.altnames)
-	ccle.expression.reduced <- reduce.features(top25, ccle.expression.names, ccle.expression)
+	achilles.expression.reduced <- reduce.features(top25, 1, expression)
+	return(achilles.expression.reduced)
+	#ccle.expression.reduced <- reduce.features(top25, ccle.expression.names, ccle.expression)
 
 
-	achilles.expression.reduced.leaderboard <- reduce.features(top25, ccle.expression.names, expression.altnames.test)
+	#achilles.expression.reduced.leaderboard <- reduce.features(top25, ccle.expression.names, expression.altnames.test)
 	
 	gene <- "A2M"
 	drug <- "Lapatinib"
 
-	achilles.labels <- essentiality[gene,]
-	ccle.labels <- drug.response.matrix[, drugs]
+	#achilles.labels <- essentiality[gene,]
+	#ccle.labels <- drug.response.matrix[, drugs]
 
 	cat("Dimension of drug.response.matrix: ", dim(drug.response.matrix), "\n")
 	cat("Dimension of achilles.expression.reduced: ", dim(achilles.expression.reduced, "\n"))

@@ -24,11 +24,15 @@ parse.gct <- function(filename) {
 	return(data.matrix)
 }
 
+parse.gct.full <- function(filename) {
+	data <- read.table(filename, skip=2, header=TRUE)
+	return(data)
+}
 read.achilles.data <- function() {
-	expression.altnames <- parse.gct("data/CCLE_expression_training.gct")
-	copynumber <- parse.gct("data/CCLE_copynumber_training.gct")
-	expression.altnames.test <- parse.gct("data/CCLE_expression_leaderboard.gct")
-	copynumber.test <- parse.gct("data/CCLE_copynumber_leaderboard.gct")
-	essentiality <- parse.gct("data/Achilles_v2.9_training.gct")
-	save(expression.altnames, copynumber, expression.altnames.test, copynumber.test, essentiality, file="achilles.RData")
+	expression <- parse.gct.full("data/CCLE_expression_training.gct")
+	copynumber <- parse.gct.full("data/CCLE_copynumber_training.gct")
+	expression.test <- parse.gct.full("data/CCLE_expression_leaderboard.gct")
+	copynumber.test <- parse.gct.full("data/CCLE_copynumber_leaderboard.gct")
+	essentiality <- parse.gct.full("data/Achilles_v2.9_training.gct")
+	save(expression, copynumber, expression.test, copynumber.test, essentiality, file="achilles.RData")
 }
