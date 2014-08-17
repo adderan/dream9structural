@@ -4,28 +4,10 @@ source("/home/alden/multitask/ando.R")
 source("/home/alden/dream9tools/fix-drugnames.R")
 source("/home/alden/dream9tools/write-gct.R")
 
-
-drug.correlations <- read.table("/home/alden/dream9structural/data/CCLE_vs_challenge.Amax.tab", header=TRUE)
-drug.correlations.names <- drug.correlations[,1]
-rownames(drug.correlations) <- drug.correlations.names
-drug.correlations <- drug.correlations[,-1]
-
 n.essentiality <- dim(essentiality)[[1]]
 n.samples <- dim(essentiality)[[2]]
 drug.response.matrix <- fix.drugnames(drug.response.matrix)
 
-choose.drugs <- function() {
-	
-	n.genes <- dim(drug.correlations)[[1]]
-	drugs.to.use <- list()
-	for(i in 1:n.genes) {
-		correlations.for.gene <- drug.correlations[i,]
-		gene.name <- rownames(drug.correlations)[[i]]
-		drug.index <- which.max(correlations.for.gene)
-		drugs.to.use[[gene.name]] <- colnames(drug.correlations)[[drug.index]]
-	}
-	return(drugs.to.use)	
-}
 test.structural.algorithm <- function() {
 	data <- test1.data()
 	ando.X <- lapply(data$X.list, t)

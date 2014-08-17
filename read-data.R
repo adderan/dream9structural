@@ -4,10 +4,10 @@ read.drug.data <- function() {
 	drug.profiles <- read.csv("data/CCLE_NP24.2009_profiling_2012.02.20.csv", header=TRUE)
 
 	ccle.expression <- read.table("data/CCLE_Expression_Entrez_2012-09-29.tab", fill = TRUE, header=TRUE)
-	ccle.expression.gene.names <- ccle.expression[,1]
-	ccle.expression <- ccle.expression[,-1]
-	ccle.expression <- as.matrix(ccle.expression)
-	rownames(ccle.expression) <- ccle.expression.gene.names
+	#ccle.expression.gene.names <- ccle.expression[,1]
+	#ccle.expression <- ccle.expression[,-1]
+	#ccle.expression <- as.matrix(ccle.expression)
+	#rownames(ccle.expression) <- ccle.expression.gene.names
 	#ccle.copynumber <- read.table
 	save(drug.response, drug.profiles, ccle.expression, file="ccle.RData")
 }
@@ -29,10 +29,10 @@ parse.gct.full <- function(filename) {
 	return(data)
 }
 read.achilles.data <- function() {
-	expression <- parse.gct.full("data/CCLE_expression_training.gct")
-	copynumber <- parse.gct.full("data/CCLE_copynumber_training.gct")
-	expression.test <- parse.gct.full("data/CCLE_expression_leaderboard.gct")
-	copynumber.test <- parse.gct.full("data/CCLE_copynumber_leaderboard.gct")
-	essentiality <- parse.gct.full("data/Achilles_v2.9_training.gct")
+	expression <- parse.gct.full("data/CCLE_expression_training_phase2.gct")
+	copynumber <- parse.gct.full("data/CCLE_copynumber_training_phase2.gct")
+	expression.test <- parse.gct.full("data/CCLE_expression_leaderboard_phase2.gct")
+	copynumber.test <- parse.gct.full("data/CCLE_copynumber_leaderboard_phase2.gct")
+	essentiality <- parse.gct.full("data/Achilles_v2.11_training_phase2.gct")
 	save(expression, copynumber, expression.test, copynumber.test, essentiality, file="achilles.RData")
 }
